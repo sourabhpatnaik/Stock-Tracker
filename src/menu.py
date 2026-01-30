@@ -12,7 +12,7 @@ while option != 3:
         print_today_stock(stock_name)
     elif option == 2:
         stock_name = input("Enter Stock Name:")
-        period = input("Enter Period (1d/3d/7d/1m/3m):").lower()
+        period = input("Enter Period (1d/3d/7d/1mo/3mo):").lower()
         print_historical_stock(stock_name,period)
     
     print("1. For Today stock detail")

@@ -120,6 +120,6 @@ def Get_Historical_Stock_Details(stock,period):
     # Asking the user if he/she want to save the file or not 
     user_save = input("Do u want to save this Data [Y/N]: ").upper()
     if user_save == "Y":
-        stock_data.to_csv(f"./saved/{file_name}")
+        stock_data.to_csv(f"./saved/{file_name}",encoding="utf-8-sig")
         print("Your Data has been saved in 'saved' Folder")
         

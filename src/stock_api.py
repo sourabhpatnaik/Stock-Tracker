@@ -1,4 +1,7 @@
 import yfinance as yfc
+import pandas as pd
+import datetime as dt
+from tabulate import tabulate
 
 def Get_Today_Stock_Detail(stock):
 
@@ -52,7 +55,7 @@ def Get_Today_Stock_Detail(stock):
     per_change = ((latest_row["Close"] - latest_row["Open"])/latest_row["Open"])*100
         
     print("Stock:",stock)
-    print("Date:",today_date,"\n")
+    print("Date:",today_date)
     
     print(f"Open: ₹{latest_row["Open"]:.2f}")
     print(f"High: ₹{latest_row["High"]:.2f}")
@@ -61,10 +64,41 @@ def Get_Today_Stock_Detail(stock):
     print(f"Volume: {latest_row["Volume"]:.2f}")
     
     if per_change > 0:
-        print(f"Change: +{per_change:.2f}%")
+        print(f"Change: +{per_change:.2f}% \n")
 
     elif per_change < 0:
-        print(f"Change: -{per_change:.2f}%")
+        print(f"Change: -{per_change:.2f}%\n")
     else:
-        print(f"Change: {per_change:.2f}%")
+        print(f"Change: {per_change:.2f}%\n")
+
+
+
+##########################################################################
+#                     HISTORICAL STOCK DETAILS                           #       
+##########################################################################
+
+
+def Get_Historical_Stock_Details(stock,period):
+    stock_name = yfc.Ticker(stock)
+    stock_data = stock_name.history(period=period)
+    stock_data.drop(["Dividends","Stock Splits"],axis="columns",inplace=True)
+    save_data = stock_data.to_csv("./data/histdata.csv")
+    new_data = pd.read_csv("./data/histdata.csv")
+    new_data["Date"] = pd.to_datetime(new_data["Date"])
+    new_data["Date"] = new_data["Date"].dt.date 
+
+
+
+    new_data["per_change"] = ((new_data["Close"] - new_data["Open"])/new_data["Open"])*100
+    new_data["per_change"] = new_data["per_change"].round(2)
+
+    price_colum = ["Open","High","Low","Close"]
+    for col in price_colum:
+        new_data[col] = new_data[col].apply(lambda x: f"₹{round(x, 2)}")
+
+    print("Historical Stock Data:")
+    print(f"Stock Name: {stock}")
+    print("Period:",period)
+    print(tabulate(new_data, headers = ["Date","Open","High","Low","Close","Volume","Change %"], tablefmt = 'psql', showindex=False))
     
+

@@ -3,6 +3,11 @@ import pandas as pd
 import datetime as dt
 from tabulate import tabulate
 
+
+##########################################################################
+#                     TODAY's STOCK DETAILS                           #       
+##########################################################################
+
 def Get_Today_Stock_Detail(stock):
 
     """
@@ -79,32 +84,42 @@ def Get_Today_Stock_Detail(stock):
 
 
 def Get_Historical_Stock_Details(stock,period):
+    
+    today_date = dt.datetime.now().strftime("%Y-%m-%d")
+    file_name = f"{stock}_{period}_{today_date}.csv"
+
+    # taking stock name 
     stock_name = yfc.Ticker(stock)
+    
+    # Getting the stock data    
     stock_data = stock_name.history(period=period)
+    
+    # Removing unnecessay columns for dataframe
     stock_data.drop(["Dividends","Stock Splits"],axis="columns",inplace=True)
-    save_data = stock_data.to_csv("./data/histdata.csv")
-    new_data = pd.read_csv("./data/histdata.csv")
-    new_data["Date"] = pd.to_datetime(new_data["Date"])
-    new_data["Date"] = new_data["Date"].dt.date 
+    
+    stock_data = stock_data.reset_index()
+    stock_data["Date"] = stock_data["Date"].dt.date 
 
 
+    # Calculating the change Percentage and then adding to new dataset
+    stock_data["per_change"] = ((stock_data["Close"] - stock_data["Open"])/stock_data["Open"])*100
+    stock_data["per_change"] = stock_data["per_change"].round(2)
 
-    new_data["per_change"] = ((new_data["Close"] - new_data["Open"])/new_data["Open"])*100
-    new_data["per_change"] = new_data["per_change"].round(2)
-
+    # Adding the "₹" symbol to ["Open","High","Low","Close"] colums for better understanding 
     price_colum = ["Open","High","Low","Close"]
     for col in price_colum:
-        new_data[col] = new_data[col].apply(lambda x: f"₹{round(x, 2)}")
+        stock_data[col] = stock_data[col].apply(lambda x: f"₹{round(x, 2)}")
 
     print("Historical Stock Data:")
     print(f"Stock Name: {stock}")
     print("Period:",period)
-    print(tabulate(new_data, headers = ["Date","Open","High","Low","Close","Volume","Change %"], tablefmt = 'psql', showindex=False))
+   
+   # Using Tabualte to make the table of our data for good presentation
+    print(tabulate(stock_data, headers = ["Date","Open","High","Low","Close","Volume","Change %"], tablefmt = 'psql', showindex=False))
 
+    # Asking the user if he/she want to save the file or not 
     user_save = input("Do u want to save this Data [Y/N]: ").upper()
     if user_save == "Y":
-        new_data.to_csv("./saved/HistoricalData.csv")
-        print("Your Data has been saved in 'data' Folder")
+        stock_data.to_csv(f"./saved/{file_name}")
+        print("Your Data has been saved in 'saved' Folder")
         
-    
-

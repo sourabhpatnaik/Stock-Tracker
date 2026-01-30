@@ -1,5 +1,6 @@
 from stock_api import Get_Today_Stock_Detail,Get_Historical_Stock_Details
 import pandas as pd
+import yfinance as yfc
 
 # Code to fetch today's Stock details
 def print_today_stock(stock_name):

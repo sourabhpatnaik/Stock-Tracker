@@ -100,5 +100,11 @@ def Get_Historical_Stock_Details(stock,period):
     print(f"Stock Name: {stock}")
     print("Period:",period)
     print(tabulate(new_data, headers = ["Date","Open","High","Low","Close","Volume","Change %"], tablefmt = 'psql', showindex=False))
+
+    user_save = input("Do u want to save this Data [Y/N]: ").upper()
+    if user_save == "Y":
+        new_data.to_csv("./saved/HistoricalData.csv")
+        print("Your Data has been saved in 'data' Folder")
+        
     
 

@@ -1,4 +1,5 @@
 from stock_api import Get_Today_Stock_Detail,Get_Historical_Stock_Details
+import pandas as pd
 
 # Code to fetch today's Stock details
 def print_today_stock(stock_name):
@@ -21,6 +22,4 @@ def print_historical_stock(stock_name,period):
             Get_Historical_Stock_Details(stock_name,period)
     except:
         print(f"NO DATA FOUND RELATED TO {stock_name} or {period}")
-
-
 

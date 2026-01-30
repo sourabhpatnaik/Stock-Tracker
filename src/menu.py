@@ -1,4 +1,5 @@
 from main import print_today_stock,print_historical_stock
+
 print("1. For Today stock detail")
 print("2. For Historical stock detail")
 print("3. for Exit\n")

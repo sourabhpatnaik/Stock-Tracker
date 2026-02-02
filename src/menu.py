@@ -1,7 +1,7 @@
-from main import print_today_stock,print_historical_stock
+from main import print_today_stock,print_short_term_stock
 
 print("1. For Today stock detail")
-print("2. For Historical stock detail")
+print("2. For Short-Term stock detail")
 print("3. for Exit\n")
 
 option = int(input("Choose Option:"))
@@ -13,7 +13,7 @@ while option != 3:
     elif option == 2:
         stock_name = input("Enter Stock Name:")
         period = input("Enter Period (1d/3d/7d/1mo/3mo):").lower()
-        print_historical_stock(stock_name,period)
+        print_short_term_stock(stock_name,period)
     
     print("1. For Today stock detail")
     print("2. For Historical stock detail")

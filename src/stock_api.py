@@ -79,11 +79,11 @@ def Get_Today_Stock_Detail(stock):
 
 
 ##########################################################################
-#                     HISTORICAL STOCK DETAILS                           #       
+#                     SHORT TERM STOCK DETAILS                           #       
 ##########################################################################
 
 
-def Get_Historical_Stock_Details(stock,period):
+def Get_Short_Term_Stock_Details(stock,period):
     
     today_date = dt.datetime.now().strftime("%Y-%m-%d")
     file_name = f"{stock}_{period}_{today_date}.csv"
@@ -105,6 +105,12 @@ def Get_Historical_Stock_Details(stock,period):
     stock_data["per_change"] = ((stock_data["Close"] - stock_data["Open"])/stock_data["Open"])*100
     stock_data["per_change"] = stock_data["per_change"].round(2)
 
+    avg_open = round(sum(stock_data["Open"]/len(stock_data["Open"])),2)
+    avg_high = round(sum(stock_data["High"]/len(stock_data["High"])),2)
+    avg_low = round(sum(stock_data["Low"]/len(stock_data["Low"])),2)
+    avg_close = round(sum(stock_data["Close"]/len(stock_data["Close"])),2)
+
+
     # Adding the "₹" symbol to ["Open","High","Low","Close"] colums for better understanding 
     price_colum = ["Open","High","Low","Close"]
     for col in price_colum:
@@ -117,9 +123,24 @@ def Get_Historical_Stock_Details(stock,period):
    # Using Tabualte to make the table of our data for good presentation
     print(tabulate(stock_data, headers = ["Date","Open","High","Low","Close","Volume","Change %"], tablefmt = 'psql', showindex=False))
 
+    print()
+    print("Stock Summary:")
+    print(f"Average Open Price: ₹{avg_open}")
+    print(f"Average High Price: ₹{avg_high}")
+    print(f"Average Low Price: ₹{avg_low}")
+    print(f"Average Close Price: ₹{avg_close}")
+    print()
+
     # Asking the user if he/she want to save the file or not 
     user_save = input("Do u want to save this Data [Y/N]: ").upper()
     if user_save == "Y":
         stock_data.to_csv(f"./saved/{file_name}",encoding="utf-8-sig")
         print("Your Data has been saved in 'saved' Folder")
-        
+
+
+##########################################################################
+#                     MULTIPLE STOCK DETAILS                           #       
+##########################################################################
+
+def Get_Multiple_Stock_Data(stock_list):
+    pass

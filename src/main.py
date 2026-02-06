@@ -1,4 +1,4 @@
-from stock_api import Get_Today_Stock_Detail,Get_Short_Term_Stock_Details,Get_Multiple_Stock_Details
+from stock_api import Get_Today_Stock_Detail,Get_Short_Term_Stock_Details,Get_Multiple_Stock_Details,Get_Historical_Stock_Details
 import pandas as pd
 import yfinance as yfc
 
@@ -38,3 +38,14 @@ def print_multiple_stock(stock_names):
             cleaned_stocks.append(stock)
             
     return Get_Multiple_Stock_Details(cleaned_stocks)
+
+
+# Code to Fetch Historical Data 
+def print_historical_stock(stock,start_date,end_date):
+    stock = stock.upper()
+    if stock.endswith(".NS"):
+        Get_Historical_Stock_Details(stock,start_date,end_date)
+    else:
+        stock = stock.upper()
+        stock = stock + '.NS'
+        Get_Historical_Stock_Details(stock,start_date,end_date)

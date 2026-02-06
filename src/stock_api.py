@@ -255,3 +255,39 @@ def Get_Multiple_Stock_Details(stock_list):
     print("Multiple Stocks Details:")
     print(tabulate(final_stock, headers=["Date","Stock Name","Open","High","Low","Close","Volume","Change %"], tablefmt="psql",showindex=False))
     print()
+
+
+
+##########################################################################
+#                     MULTIPLE STOCK DETAILS                           #       
+##########################################################################
+
+
+def Get_Historical_Stock_Details(stock,start_date,end_date):
+
+    today_date = dt.datetime.now().strftime("%Y-%m-%d")
+    file_name = f"{stock}_{today_date}.csv"
+
+    stock_data = yfc.download(stock,start=start_date,end=end_date)
+    stock_data.columns = stock_data.columns.droplevel(1)
+    stock_data.columns.name = None
+    stock_data = stock_data.reset_index()
+    stock_data["Date"] = stock_data["Date"].dt.date
+
+    sym_col = ["Close","High","Low","Open"]
+    for col in sym_col:
+        stock_data[col] = stock_data[col].apply(lambda x: f"₹{round(x,2)}")
+    
+    print("Historical Stock Details:")
+    print()
+    print("Stock Name:",stock)
+    print()
+    print(tabulate(stock_data,headers=["Date","Close","High","Low","Open","Volume"], tablefmt="psql", showindex=False))
+
+    save_inp = (input("Do You Want to Save this Data (Y/N): ")).upper()
+    if save_inp == "Y":
+        stock_data.to_csv(f"./saved/{file_name}",encoding="utf-8-sig")
+        print("Your Data has been saved in 'saved' Folder")
+
+
+

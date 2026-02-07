@@ -1,5 +1,4 @@
 from main import print_today_stock,print_short_term_stock,print_multiple_stock,print_historical_stock
-from stock_api import Get_Multiple_Stock_Details
 
 print("1. For Today stock detail")
 print("2. For Short-Term stock detail")
@@ -29,7 +28,7 @@ while option != 5:
 
     print()    
     print("1. For Today stock detail")
-    print("2. For Historical stock detail")
+    print("2. For Short Term stock detail")
     print("3. For Multiple Stock details")
     print("4. For Hostorical Stock details")
     print("5. for Exit")

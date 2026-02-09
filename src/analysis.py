@@ -69,3 +69,5 @@ def calculate_stock_average(stock):
         "avg_low" : round(stock["Low"].mean(),2),
         "avg_close" : round(stock["Close"].mean(),2)
     }
+
+

@@ -1,5 +1,7 @@
 import yfinance as yfc
 import pandas as pd
+import datetime as dt
+from dateutil.relativedelta import relativedelta
 from utils import normalize_stock,normalize_multiple_stock
 
 """
@@ -176,5 +178,27 @@ def Get_Historical_Stock_Details(stock,start_date,end_date):
     stock_data["Date"] = stock_data["Date"].dt.date
 
     return stock,stock_data
+
+
+#######################################################################################
+#                     FETCHING SMA50  (Simple Moving Average)                         #
+#######################################################################################
+
+def Get_SMA50(stock):
+    stock = normalize_stock(stock)
+
+    stock = yfc.Ticker(stock)
+    stock_data = stock.history(period="1y")
+
+    stock_data = stock_data.reset_index()
+    stock_data["Date"] = stock_data["Date"].dt.date
+    stock_data = stock_data.drop(["Open","High","Low","Volume","Dividends","Stock Splits"], axis="columns")
+
+    stock_data["SM50"] = stock_data["Close"].rolling(window=50).mean()
+    latest_sm50 = stock_data["SM50"].iloc[-1]
+    latest_close = stock_data["Close"].iloc[-1]
+
+    return latest_sm50 , latest_close
+
 
 

@@ -1,4 +1,4 @@
-from stock_api import Get_Today_Stock_Detail,Get_Short_Term_Stock_Details,Get_Multiple_Stock_Details,Get_Historical_Stock_Details
+from stock_api import Get_Today_Stock_Detail,Get_Short_Term_Stock_Details,Get_Multiple_Stock_Details,Get_Historical_Stock_Details,Get_SMA50
 from analysis import add_percentage_change,calculate_stock_average
 from formatter import format_currency,format_change
 from tabulate import tabulate
@@ -61,7 +61,7 @@ def print_today_stock(stock_name):
     print(f"Low: ₹{latest["Low"]:.2f}")
     print(f"Close: ₹{latest["Close"]:.2f}")
     print(f"Volume: {latest["Volume"]:.2f}")
-    print(f"Change %: {latest["Change"]:.2f}")
+    print(f"Change %: {latest["Change %"]:.2f}")
     print()
 
 
@@ -200,11 +200,29 @@ def print_historical_stock(stock,start_date,end_date):
         tablefmt="psql",
         showindex=False
     ))
-    
+
     # Display analysis results
     print()
     print("Stock Analysis:")
     for k,v in analysis.items():
         print(f"{k.replace("_"," ").title()}: ₹{v}")
 
+
+##########################################################################
+#                            SM50 ANALYSIS                               #
+##########################################################################
+
+def print_sm50(stock):
+    sm50_data = Get_SMA50(stock)
+    close = sm50_data[0]
+    sma = sm50_data[1]
+
+    print("Latest Close Price :", round(close,2))
+    print("Latest SMA50       :", round(sma,2))
+    if close > sma:
+        print("🟢 BULLISH 📈 | Price above SMA50")
+    elif close < sma:
+        print("🔴 BEARISH 📉 | Price below SMA50")
+    else:
+        print("🟡 SIDEWAYS ⚖️ | Price almost same as SMA50")
 
